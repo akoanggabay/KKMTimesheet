@@ -16,7 +16,6 @@ router.post("/login", validInfo, async (req, res) => {
         const data = await pool.request()
         .input('userid',mssql.VarChar,idno)
         .query("SELECT * FROM users WHERE idno = @userid and active = 1")
-        
         await pool.close();
         if(data.rowsAffected[0] <= 0)
         {
@@ -26,9 +25,9 @@ router.post("/login", validInfo, async (req, res) => {
   
         await bcrypt.compare(password, hash, function(err, resdata) {
     
-          /* if (resdata === false) {
+          if (resdata === false) {
             return res.status(401).json("Invalid Password");
-          } */
+          }
           const jwtToken = jwtGenerator(
             {
               idno: data.recordset[0].idno,
